@@ -4,8 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-	"strconv"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -29,10 +30,28 @@ func main() {
 func sumFirstAndLast(input string) int {
     first := -1
     last := -1
+
+
+    digits := map[string]int { "one":1,"two":2,"three":3,"four":4,"five":5,"six":6,"seven":7,"eight":8,"nine":9}
+
+    begin := false
+    str := []rune{}
     for _, v := range input {
 	number, err := strconv.Atoi(string(v))
 	if err != nil {
-	    continue
+	    if begin {
+
+	    } else if strings.Contains("otfsen", string(v)) {
+		begin = true
+		str = append(str, v)
+	    }
+
+	    if len(str) >= 3 {
+		if res := digits[string(str)]; res != 0 {
+		    last = res
+		}
+		checkForDigit(str, )
+	    }
 	} else if first == -1 {
 	    first = number
 	    last = number
@@ -42,4 +61,13 @@ func sumFirstAndLast(input string) int {
     }
 
     return 10 * first + last
+}
+
+func checkForDigit(str []rune, state string) int {
+    switch str[0] {
+	case 'o':
+	    	
+    }
+
+    return 0
 }
