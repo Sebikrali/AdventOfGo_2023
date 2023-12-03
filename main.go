@@ -10,8 +10,9 @@ import (
 )
 
 func main() {
-    // Objective: Read input, for each line take the first and last digit and concat them
-    // Sum the result of all lines.
+    // Objective: Read input, for each game check if the amount of red, green or blue is possible
+    // Sum the IDs of all possible Games.
+    // 12 red, 13 green, 14 blue
     f, err := os.Open("input")
     if err != nil {
         log.Fatal(err)
@@ -22,52 +23,49 @@ func main() {
     scanner := bufio.NewScanner(f)
     sum := 0
     for scanner.Scan() {
-	sum += sumFirstAndLast(scanner.Text())
+	sum += isPossible(scanner.Text())
+	fmt.Printf("\nsum=%d\n", sum)
     }
     fmt.Println(sum)
 }
 
-func sumFirstAndLast(input string) int {
-    first := -1
-    last := -1
-
-
-    digits := map[string]int { "one":1,"two":2,"three":3,"four":4,"five":5,"six":6,"seven":7,"eight":8,"nine":9}
-
-    begin := false
-    str := []rune{}
-    for _, v := range input {
-	number, err := strconv.Atoi(string(v))
-	if err != nil {
-	    if begin {
-
-	    } else if strings.Contains("otfsen", string(v)) {
-		begin = true
-		str = append(str, v)
-	    }
-
-	    if len(str) >= 3 {
-		if res := digits[string(str)]; res != 0 {
-		    last = res
-		}
-		checkForDigit(str, )
-	    }
-	} else if first == -1 {
-	    first = number
-	    last = number
-	} else {
-	    last = number
-	}
+func isPossible(game string) int {
+    id, err := strconv.Atoi(game[5:strings.Index(game, ":")])
+    fmt.Printf("id=%d, game=%s\n", id, game)
+    if err != nil {
+	log.Fatal(err)
     }
 
-    return 10 * first + last
+    tmp := game[strings.Index(game, ":")+1:]
+    var index int
+    for index != -1 {
+	index = strings.IndexAny(tmp, "1234567890")
+	if index == -1 {
+	    continue;
+	}
+	space := index + strings.Index(tmp[index:], " ")
+	number, _ := strconv.Atoi(string(tmp[index:space]))
+	fmt.Printf("number=%d, string=%s,", number, tmp[space:])
+	if isInvalidSet(number, tmp[space:space + 3]) {
+	    return 0
+	}
+	tmp = tmp[index + 1:]
+	fmt.Printf("tmp=%s\n", tmp)
+    }
+    
+    return id
 }
 
-func checkForDigit(str []rune, state string) int {
-    switch str[0] {
-	case 'o':
-	    	
+func isInvalidSet(number int, firstChar string) bool {
+    fmt.Printf("func(%d, %s)\n", number, firstChar)
+    switch string(firstChar[1]) {
+    case "r":
+	return number > 12
+    case "g":
+	return number > 13
+    case "b":
+	return number > 14
+    default:
+	return false
     }
-
-    return 0
 }
