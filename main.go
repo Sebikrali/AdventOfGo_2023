@@ -24,14 +24,12 @@ func main() {
     sum := 0
     for scanner.Scan() {
 	sum += isPossible(scanner.Text())
-	fmt.Printf("\nsum=%d\n", sum)
     }
     fmt.Println(sum)
 }
 
 func isPossible(game string) int {
     id, err := strconv.Atoi(game[5:strings.Index(game, ":")])
-    fmt.Printf("id=%d, game=%s\n", id, game)
     if err != nil {
 	log.Fatal(err)
     }
@@ -45,19 +43,16 @@ func isPossible(game string) int {
 	}
 	space := index + strings.Index(tmp[index:], " ")
 	number, _ := strconv.Atoi(string(tmp[index:space]))
-	fmt.Printf("number=%d, string=%s,", number, tmp[space:])
 	if isInvalidSet(number, tmp[space:space + 3]) {
 	    return 0
 	}
 	tmp = tmp[index + 1:]
-	fmt.Printf("tmp=%s\n", tmp)
     }
     
     return id
 }
 
 func isInvalidSet(number int, firstChar string) bool {
-    fmt.Printf("func(%d, %s)\n", number, firstChar)
     switch string(firstChar[1]) {
     case "r":
 	return number > 12
