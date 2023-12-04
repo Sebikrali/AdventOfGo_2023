@@ -5,62 +5,62 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
-	"strings"
 )
 
 func main() {
-    // Objective: Read input, for each game check if the amount of red, green or blue is possible
-    // Sum the IDs of all possible Games.
-    // 12 red, 13 green, 14 blue
-    f, err := os.Open("input")
+    // Objective: Read input, sum all numbers that are adjacent to a symbol like *,#, basically everything that isn't a number
+    // and '.' doesn't count
+    // 467..114..
+    // ...*......
+    // ..35..633.
+    // Solution of test_input: 4361
+    // f, err := os.Open("input")
+    f, err := os.Open("test_input")
     if err != nil {
         log.Fatal(err)
     }
-
     defer f.Close()
 
     scanner := bufio.NewScanner(f)
     sum := 0
+
+    buffer := [3]string{}
+    for i := 0; i < 3; i++ {
+	scanner.Scan()
+	buffer[i] = scanner.Text()
+    }
+    res := checkForAdjacentSymbols(buffer)
+
     for scanner.Scan() {
-	sum += isPossible(scanner.Text())
+	buffer[0] = buffer[2]
+	buffer[1] = scanner.Text()
+	if scanner.Scan() {
+	    buffer[2] = scanner.Text()
+	}
+	res = append(res, checkForAdjacentSymbols(buffer)...)
+    }
+    for _,v := range res {
+	sum += v
     }
     fmt.Println(sum)
 }
 
-func isPossible(game string) int {
-    id, err := strconv.Atoi(game[5:strings.Index(game, ":")])
-    if err != nil {
-	log.Fatal(err)
-    }
-
-    tmp := game[strings.Index(game, ":")+1:]
-    var index int
-    for index != -1 {
-	index = strings.IndexAny(tmp, "1234567890")
-	if index == -1 {
-	    continue;
-	}
-	space := index + strings.Index(tmp[index:], " ")
-	number, _ := strconv.Atoi(string(tmp[index:space]))
-	if isInvalidSet(number, tmp[space:space + 3]) {
-	    return 0
-	}
-	tmp = tmp[index + 1:]
-    }
-    
-    return id
+type token struct {
+    index	int
+    numOrSym	int // 0 for number, 1 for symbol
+    digit	int // only if a number
 }
 
-func isInvalidSet(number int, firstChar string) bool {
-    switch string(firstChar[1]) {
-    case "r":
-	return number > 12
-    case "g":
-	return number > 13
-    case "b":
-	return number > 14
-    default:
-	return false
-    }
+func checkForAdjacentSymbols(lines [3]string) []int {
+    // Idea: Go through the lines and add the indexes of numbers and symbols to a slice
+    //	     one slice for each line
+
+    parsedLines := [3] []token{}
+    // TODO: Parse each line in a separat go routine
+
+    return nil
+}
+
+func parseLine(line string, result *[]token) {
+
 }
