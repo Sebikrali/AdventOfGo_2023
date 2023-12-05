@@ -1,8 +1,8 @@
 # Advent Of Code 2023 - Go
 
 ## Progress
-01 - 
-02 -
+01 - *
+02 - *
 03 -
 04 -
 05 -
