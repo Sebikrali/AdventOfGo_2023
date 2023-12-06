@@ -8,11 +8,7 @@ import (
 )
 
 func main() {
-    // Objective: Check if the numbers of a scratchcard match the winning numbers, 
-    // where the first match gives 1 point and each match after that doubles the got points
-    // Card 1: 41 48 83 86 17 | 83 86 6 31 17 9 48 53
-    //	      winning numbers | numbers to check
-    // Solution of test_input: 13
+    // Objective: To complicated, might add later
 
     // f, err := os.Open("input")
     f, err := os.Open("test_input")
